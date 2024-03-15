@@ -11,5 +11,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class LoginRqs 
 {
-    private String mail, password;
+    private String email, password;
 }

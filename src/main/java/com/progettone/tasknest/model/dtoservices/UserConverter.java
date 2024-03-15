@@ -1,5 +1,7 @@
 package com.progettone.tasknest.model.dtoservices;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +21,9 @@ public class UserConverter {
         return User
                 .builder()
                 .name(dto.getName())
-                .email(dto.getMail())
+                .email(dto.getEmail())
                 .password(dto.getPassword())
+                .date_of_regist(LocalDate.now())
                 .build();
     }
 

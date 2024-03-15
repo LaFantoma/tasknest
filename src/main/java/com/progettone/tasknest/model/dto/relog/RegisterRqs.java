@@ -10,5 +10,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class RegisterRqs {
-    private String mail,password,name;
+    private String email,password,name;
 }
