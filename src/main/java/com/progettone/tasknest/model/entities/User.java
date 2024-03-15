@@ -3,7 +3,7 @@ package com.progettone.tasknest.model.entities;
 import java.time.LocalDate;
 import java.util.Set;
 
-import org.hibernate.annotations.CascadeType;
+import jakarta.persistence.CascadeType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,14 +35,14 @@ public class User {
     private LocalDate date_of_regist;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "my_user", fetch = FetchType.EAGER) // cascade da errore
+    @OneToMany(mappedBy = "my_user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<UserToBoard> my_boards;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "my_user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "my_user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<UserToTask> my_tasks;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<Comment> my_comments;
 }

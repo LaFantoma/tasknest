@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,8 +26,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class List 
-{
+public class List {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -36,11 +36,11 @@ public class List
     @JsonIgnore
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "board_id") 
-    private Board board; 
+    @JoinColumn(name = "board_id")
+    private Board board;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "list", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "list", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<Task> tasks;
 
 }

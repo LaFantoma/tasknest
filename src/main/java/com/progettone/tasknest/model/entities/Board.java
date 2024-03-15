@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -33,10 +34,10 @@ public class Board {
     private boolean visible;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "my_board", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "my_board", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<UserToBoard> my_users;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<List> my_lists;
 }
