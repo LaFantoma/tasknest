@@ -42,6 +42,10 @@ public class Task {
     private Set<UserToTask> assigned_to;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "task", fetch = FetchType.EAGER)
+    private Set<Comment> comments;
+
+    @JsonIgnore
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "list_id") 
