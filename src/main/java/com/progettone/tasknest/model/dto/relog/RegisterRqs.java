@@ -1,4 +1,4 @@
-package com.progettone.tasknest.model.dto;
+package com.progettone.tasknest.model.dto.relog;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class UserDtoBase {
-    
-    private String name;
-    private String email;
-    
+public class RegisterRqs {
+    private String mail,password,name;
 }
