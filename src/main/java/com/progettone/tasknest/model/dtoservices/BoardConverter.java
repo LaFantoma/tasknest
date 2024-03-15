@@ -33,7 +33,7 @@ public class BoardConverter {
                 .date_of_creation(b.getDate_of_creation())
                 .visible(b.isVisible())
                 .my_users(findUsers(b))
-                .my_columns(b.getMy_columns())
+                .my_tasklists(b.getMy_tasklists())
                 .build();
     }
 
