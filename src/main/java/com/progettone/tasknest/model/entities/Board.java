@@ -37,6 +37,6 @@ public class Board {
     private Set<UserToBoard> my_users;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "board_id", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
     private Set<List> my_lists;
 }
