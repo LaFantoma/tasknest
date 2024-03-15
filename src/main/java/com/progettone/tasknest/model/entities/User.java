@@ -39,7 +39,7 @@ public class User {
     private Set<UserToBoard> my_boards;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user_id", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "my_user", fetch = FetchType.EAGER)
     private Set<UserToTask> my_tasks;
 
     @JsonIgnore
