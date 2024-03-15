@@ -1,6 +1,7 @@
 package com.progettone.tasknest.model.entities;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,11 +32,14 @@ public class Task {
     private Integer id;
     private String title;
     private String description;
-    private Integer assigned_to;
     private LocalDate expired_date;
     private String state;
     private Integer position;
 
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "my_task", fetch = FetchType.EAGER)
+    private Set<UserToTask> assigned_to;
 
     @JsonIgnore
     @ToString.Exclude
