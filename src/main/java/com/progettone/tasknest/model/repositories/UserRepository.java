@@ -1,5 +1,9 @@
 package com.progettone.tasknest.model.repositories;
 
-public class UserRepository {
+import org.springframework.data.jpa.repository.JpaRepository; 
+
+import com.progettone.tasknest.model.entities.User;
+
+public interface UserRepository extends JpaRepository<User, Integer>  {
 
 }
