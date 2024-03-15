@@ -39,5 +39,5 @@ public class Board {
 
     @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    private Set<Column> my_columns;
+    private Set<TaskList> my_tasklists;
 }

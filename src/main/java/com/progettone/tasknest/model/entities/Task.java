@@ -48,6 +48,6 @@ public class Task {
     @JsonIgnore
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "column_id")
-    private Column column;
+    @JoinColumn(name = "tasklist_id")
+    private TaskList tasklist;
 }
