@@ -3,8 +3,6 @@ package com.progettone.tasknest.model.entities;
 import java.time.LocalDate;
 import java.util.Set;
 
-import org.hibernate.annotations.CascadeType;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -23,26 +21,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
-    private String email;
-    private String password;
-    private LocalDate date_of_regist;
+    private String title;
+    private String description;
+    private LocalDate date_of_creation;
+    private boolean visible;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "my_user", fetch = FetchType.EAGER) // cascade da errore
-    private Set<UserToBoard> my_boards;
+    @OneToMany(mappedBy = "my_board", fetch = FetchType.EAGER)
+    private Set<UserToBoard> my_users;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user_id", fetch = FetchType.EAGER)
-    private Set<UserToTask> my_tasks;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
-    private Set<Comment> my_comments;
+    @OneToMany(mappedBy = "board_id", fetch = FetchType.EAGER)
+    private Set<List> my_lists;
 }
