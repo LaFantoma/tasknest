@@ -3,7 +3,7 @@ package com.progettone.tasknest.model.dto.board;
 import java.util.List;
 import java.util.Set;
 
-import com.progettone.tasknest.model.entities.Column;
+import com.progettone.tasknest.model.entities.TaskList;
 import com.progettone.tasknest.model.entities.User;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class BoardDtoRspTaskname extends BoardDtoBase {
     private Integer id;
 
     private List<User> my_users;
-    private Set<Column> my_columns;
+    private Set<TaskList> my_tasklists;
 
     private String task_name;
 

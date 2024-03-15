@@ -26,7 +26,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Column {
+public class TaskList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -40,7 +40,7 @@ public class Column {
     private Board board;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "column", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "tasklist", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private Set<Task> tasks;
 
 }
