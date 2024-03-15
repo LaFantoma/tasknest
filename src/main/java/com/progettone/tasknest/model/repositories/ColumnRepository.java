@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.progettone.tasknest.model.entities.Column;
 
-public interface ListRepository extends JpaRepository<Column, Integer> {
+public interface ColumnRepository extends JpaRepository<Column, Integer> {
 
 }
