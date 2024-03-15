@@ -37,7 +37,6 @@ public class Task {
     private String state;
     private Integer position;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "my_task", fetch = FetchType.EAGER)
     private Set<UserToTask> assigned_to;
@@ -49,6 +48,6 @@ public class Task {
     @JsonIgnore
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "list_id") 
-    private List list; 
+    @JoinColumn(name = "column_id")
+    private Column column;
 }
