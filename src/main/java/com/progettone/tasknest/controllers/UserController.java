@@ -36,7 +36,7 @@ public class UserController {
         if (!isValidEmail(q.getEmail())) {
             return ResponseEntity.badRequest().body("La email non è valida");
         }
-
+        repo.save(q);
         return ResponseEntity.ok().body("Registrazione avvenuta con successo");
     }
 
