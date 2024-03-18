@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.progettone.tasknest.model.dto.tasklist.TasklistDtoRspName;
 import com.progettone.tasknest.model.dto.tasklist.TasklistInstRqs;
-import com.progettone.tasknest.model.entities.Task;
 import com.progettone.tasknest.model.entities.TaskList;
 import com.progettone.tasknest.model.repositories.BoardsRepository;
 
@@ -14,9 +13,6 @@ public class TasklistConverter {
 
     @Autowired
     BoardsRepository bRepo;
-
-    public TasklistDtoRspName TasklistToDtoRspName(TaskList t) 
-    {
 
     public TasklistDtoRspName tasklistToDtoRspName(TaskList t) {
 
