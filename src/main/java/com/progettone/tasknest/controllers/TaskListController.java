@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.progettone.tasknest.model.dto.tasklist.TasklistInstRqs;
 import com.progettone.tasknest.model.dto.tasklist.TasklistMoveRqs;
+import com.progettone.tasknest.model.dto.tasklist.TasklistPutRqs;
 import com.progettone.tasknest.model.dtoservices.TasklistConverter;
 import com.progettone.tasknest.model.entities.TaskList;
 import com.progettone.tasknest.model.repositories.TasklistRepository;
@@ -31,13 +32,25 @@ public class TaskListController {
         if (id != null && !title.isBlank()) {
             TaskList tl = tlConv.TasklistInstRqsToTasklist(request);
             tlRepo.save(tl);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("New list succesfuly created!");
+            return ResponseEntity.status(HttpStatus.OK).body("New list succesfuly created!");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid body request!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid body request!");
         }
     }
 
-    @PutMapping("/list")
+    @PutMapping("/list/title")
+    public ResponseEntity<?> putList(@RequestBody TasklistPutRqs request) {
+        TaskList tl = tlRepo.findById(request.getIdList()).get();
+        if (request.getIdList() != null && !request.getTitle().isBlank()) {
+            tl.setTitle(request.getTitle());
+            tlRepo.save(tl);
+            return ResponseEntity.status(HttpStatus.OK).body("List hase been changed!");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid body request!");
+        }
+    }
+
+    @PutMapping("/list/position")
     public ResponseEntity<?> moveList(@RequestBody TasklistMoveRqs request) {
         TaskList tl = tlRepo.findById(request.getIdList()).get();
         if (request.getIdList() != null && request.getNewPosition() != null
@@ -61,9 +74,9 @@ public class TaskListController {
             tl.setPosition(request.getNewPosition());
             tlRepo.save(tl);
 
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("New position setted!");
+            return ResponseEntity.status(HttpStatus.OK).body("New position setted!");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid body request!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid body request!");
         }
 
     }
