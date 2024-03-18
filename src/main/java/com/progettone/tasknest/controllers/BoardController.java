@@ -8,8 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.progettone.tasknest.model.dto.board.BoardDtoRqsPut;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspSimple;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspTaskname;
 import com.progettone.tasknest.model.dtoservices.BoardConverter;
@@ -56,6 +59,19 @@ public class BoardController {
         } else
             return new ResponseEntity<String>("board inesistente", HttpStatus.NOT_FOUND);
 
+    }
+
+    @PutMapping("/boards")
+    public ResponseEntity<?> modifyBoard(@RequestBody BoardDtoRqsPut dto) {
+
+        Optional<Board> b = bRepo.findById(dto.getId());
+
+        if (!b.isPresent())
+            return new ResponseEntity<String>("board inesistente", HttpStatus.NOT_FOUND);
+
+        Board board = bConv.dtoRqsPutToBoard(dto);
+        bRepo.save(board);
+        return new ResponseEntity<BoardDtoRspTaskname>(bConv.BoardToDtoRspTaskname(board), HttpStatus.OK);
     }
 
 }

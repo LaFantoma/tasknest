@@ -1,21 +1,39 @@
 package com.progettone.tasknest.model.dtoservices;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.progettone.tasknest.model.dto.board.BoardDtoRqsPut;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspSimple;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspTaskname;
+import com.progettone.tasknest.model.dto.tasklist.TasklistDtoRspName;
 import com.progettone.tasknest.model.entities.Board;
+import com.progettone.tasknest.model.entities.TaskList;
 import com.progettone.tasknest.model.entities.User;
+import com.progettone.tasknest.model.entities.UserToBoard;
+import com.progettone.tasknest.model.repositories.BoardsRepository;
+import com.progettone.tasknest.model.repositories.TasklistRepository;
+import com.progettone.tasknest.model.repositories.UserToBoardRepository;
 
 @Service
 public class BoardConverter {
 
     @Autowired
     TasklistConverter tlConv;
+
+    @Autowired
+    BoardsRepository bRepo;
+
+    @Autowired
+    UserToBoardRepository utbRepo;
+
+    @Autowired
+    TasklistRepository tlRepo;
 
     public BoardDtoRspSimple BoardToDtoRspSimple(Board b) {
 
@@ -37,7 +55,7 @@ public class BoardConverter {
                 .date_of_creation(b.getDate_of_creation())
                 .visible(b.isVisible())
                 .my_users(findUsers(b))
-                .my_tasklists(b.getMy_tasklists().stream().map(i -> tlConv.TasklistToDtoRspName(i))
+                .my_tasklists(b.getMy_tasklists().stream().map(i -> tlConv.tasklistToDtoRspName(i))
                         .collect(Collectors.toSet()))
                 .build();
     }
@@ -45,6 +63,17 @@ public class BoardConverter {
     public List<User> findUsers(Board b) {
 
         return b.getMy_users().stream().map(i -> i.getMy_user()).toList();
+    }
+
+    public Board dtoRqsPutToBoard(BoardDtoRqsPut dto) {
+
+        return Board
+                .builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .visible(dto.isVisible())
+                .build();
     }
 
 }

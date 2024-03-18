@@ -8,7 +8,7 @@ import com.progettone.tasknest.model.entities.TaskList;
 @Service
 public class TasklistConverter {
 
-    public TasklistDtoRspName TasklistToDtoRspName(TaskList t) {
+    public TasklistDtoRspName tasklistToDtoRspName(TaskList t) {
 
         return TasklistDtoRspName
                 .builder()
@@ -17,6 +17,16 @@ public class TasklistConverter {
                 .position(t.getPosition())
                 .build();
 
+    }
+
+    public TaskList dtoRspNameToTaskList(TasklistDtoRspName dto) {
+
+        return TaskList
+                .builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .position(dto.getPosition())
+                .build();
     }
 
 }
