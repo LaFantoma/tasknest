@@ -1,8 +1,9 @@
 package com.progettone.tasknest.model.dtoservices;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.hibernate.mapping.Set;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.progettone.tasknest.model.dto.board.BoardDtoRspSimple;
@@ -12,6 +13,9 @@ import com.progettone.tasknest.model.entities.User;
 
 @Service
 public class BoardConverter {
+
+    @Autowired
+    TasklistConverter tlConv;
 
     public BoardDtoRspSimple BoardToDtoRspSimple(Board b) {
 
@@ -33,7 +37,8 @@ public class BoardConverter {
                 .date_of_creation(b.getDate_of_creation())
                 .visible(b.isVisible())
                 .my_users(findUsers(b))
-                .my_tasklists(b.getMy_tasklists())
+                .my_tasklists(b.getMy_tasklists().stream().map(i -> tlConv.TasklistToDtoRspName(i))
+                        .collect(Collectors.toSet()))
                 .build();
     }
 

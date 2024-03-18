@@ -1,5 +1,6 @@
 package com.progettone.tasknest.model.entities;
 
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -23,6 +25,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = { "my_user", "my_board" }) // Escludi i campi che causano il loop
 public class UserToBoard {
 
     @Id
@@ -40,5 +43,10 @@ public class UserToBoard {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "board_id")
     private Board my_board;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 }
