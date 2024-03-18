@@ -30,14 +30,14 @@ public class BoardController {
     @Autowired
     UserToBoardRepository utbRepo;
 
-    @GetMapping("/boards/{id_u}")
+    @GetMapping("/boards/user/{id_u}")
     public ResponseEntity<?> getMyBoards(@PathVariable Integer id_u) {
 
         // prendo la lista delle board collegate all'utente
         List<UserToBoard> utb = utbRepo.findAll().stream().filter(i -> i.getMy_user().getId() == id_u).toList();
         List<Board> b = utb.stream().map(i -> i.getMy_board()).toList();
 
-        if (b != null) {
+        if (b != null && !b.isEmpty()) {
             List<BoardDtoRspSimple> boards = b.stream().map(i -> bConv.BoardToDtoRspSimple(i)).toList();
             return new ResponseEntity<List<BoardDtoRspSimple>>(boards, HttpStatus.OK);
         } else

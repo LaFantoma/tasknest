@@ -1,4 +1,4 @@
-package com.progettone.tasknest.model.dto;
+package com.progettone.tasknest.model.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class UserDtoRspId extends UserDtoBase
-{
+public class UserDtoRspId extends UserDtoBase {
      private Integer id;
 }

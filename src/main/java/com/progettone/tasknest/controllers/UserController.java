@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.progettone.tasknest.model.dto.UserDtoRspId;
 import com.progettone.tasknest.model.dto.relog.LoginRqs;
 import com.progettone.tasknest.model.dto.relog.RegisterRqs;
+import com.progettone.tasknest.model.dto.user.UserDtoRspId;
 import com.progettone.tasknest.model.dtoservices.UserConverter;
 import com.progettone.tasknest.model.entities.User;
 import com.progettone.tasknest.model.repositories.UserRepository;
@@ -25,8 +25,7 @@ public class UserController {
     UserConverter conv;
 
     @PostMapping("/user/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRqs dto) 
-    {
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRqs dto) {
         User q = conv.RegisterToUser(dto);
         if (!isValidPassword(q.getPassword())) {
             return ResponseEntity.badRequest().body(
@@ -41,8 +40,7 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<?> userLogin(@RequestBody LoginRqs request) 
-    {
+    public ResponseEntity<?> userLogin(@RequestBody LoginRqs request) {
         String email = request.getEmail();
         String password = request.getPassword();
 
