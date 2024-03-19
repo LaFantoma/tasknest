@@ -1,8 +1,12 @@
 package com.progettone.tasknest.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +16,7 @@ import com.progettone.tasknest.model.dto.tasklist.TasklistInstRqs;
 import com.progettone.tasknest.model.dto.tasklist.TasklistMoveRqs;
 import com.progettone.tasknest.model.dto.tasklist.TasklistPutRqs;
 import com.progettone.tasknest.model.dtoservices.TasklistConverter;
+import com.progettone.tasknest.model.entities.Board;
 import com.progettone.tasknest.model.entities.TaskList;
 import com.progettone.tasknest.model.repositories.TasklistRepository;
 
@@ -53,31 +58,43 @@ public class TaskListController {
     @PutMapping("/list/position")
     public ResponseEntity<?> moveList(@RequestBody TasklistMoveRqs request) {
         TaskList tl = tlRepo.findById(request.getIdList()).get();
-        if (request.getIdList() != null && request.getNewPosition() != null
-                && request.getNewPosition() < tlRepo.findAll().size()) {
-            if (request.getNewPosition() > tl.getPosition()) {
-                tlRepo.findAll().stream().filter(t ->t.getBoard()==tl.getBoard() &&  t.getPosition() <= request.getNewPosition()).forEach(f -> {
-                    if (f.getPosition() != 0) {
-                        f.setPosition(f.getPosition() - 1);
-                        tlRepo.save(f);
-                    }
-                });
-            } else {
-                tlRepo.findAll().stream().filter(t ->t.getBoard()==tl.getBoard() && t.getPosition() >= request.getNewPosition()).forEach(f -> {
-                    if (f.getPosition() != tlRepo.findAll().size() - 1) {
-                        f.setPosition(f.getPosition() + 1);
-                        tlRepo.save(f);
-                    }
-                });
-            }
+        Board board = tl.getBoard();
 
-            tl.setPosition(request.getNewPosition());
-            tlRepo.save(tl);
+        if (request.getNewPosition() > board.getMy_tasklists().size() + 1 || request.getNewPosition() < 1)
+            return new ResponseEntity<String>("Invalid body request!", HttpStatus.BAD_REQUEST);
 
-            return ResponseEntity.status(HttpStatus.OK).body("New position setted!");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid body request!");
+        List<TaskList> tLIsts = tlRepo.findAll().stream().filter(i -> i.getBoard().equals(board)).toList();
+
+        if (request.getNewPosition() > tl.getPosition()) {
+
+            tLIsts.stream().filter(i -> i.getPosition() <= request.getNewPosition() && i.getPosition() > tl.getPosition())
+                    .forEach(e -> {
+                        e.setPosition(e.getPosition() - 1);
+                        tlRepo.save(e);
+                    });
         }
 
+         if (request.getNewPosition() < tl.getPosition()) {
+
+            tLIsts.stream().filter(i -> i.getPosition() >= request.getNewPosition() && i.getPosition() < tl.getPosition())
+                    .forEach(e -> {
+                        e.setPosition(e.getPosition() + 1);
+                        tlRepo.save(e);
+
+                    });
+        }
+        tl.setPosition(request.getNewPosition());
+        tlRepo.save(tl);
+        return new ResponseEntity<String>("New position setted!", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/list/{id}")
+    public ResponseEntity<?> deleteList(@PathVariable Integer id) {
+        if (tlRepo.findById(id).isPresent()) {
+
+            tlRepo.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else
+            return new ResponseEntity<String>("Non esiste una list con id " + id, HttpStatus.BAD_REQUEST);
     }
 }
