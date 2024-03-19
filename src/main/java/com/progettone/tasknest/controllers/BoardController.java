@@ -71,19 +71,13 @@ public class BoardController {
     @PutMapping("/boards")
     public ResponseEntity<?> modifyBoard(@RequestBody BoardDtoRqsPut dto) {
 
-        Optional<Board> b = bRepo.findById(dto.getId());
+        Board board = bConv.dtoRqsPutToBoard(dto);
 
-        if (!b.isPresent())
+        if (board == null)
             return new ResponseEntity<String>("board inesistente", HttpStatus.NOT_FOUND);
 
-        // Board board = bConv.dtoRqsPutToBoard(dto);
-
-        Board board = b.get();
-        board.setTitle(dto.getTitle());
-        board.setDescription(dto.getDescription());
-        board.setVisible(dto.isVisible());
         bRepo.save(board);
-        return new ResponseEntity<Board>(board, HttpStatus.OK);
+        return new ResponseEntity<BoardDtoRspTaskname>(bConv.BoardToDtoRspTaskname(board), HttpStatus.OK);
     }
 
     @PutMapping("/boards/users")

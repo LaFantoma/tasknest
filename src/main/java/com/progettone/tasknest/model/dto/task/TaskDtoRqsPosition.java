@@ -1,4 +1,4 @@
-package com.progettone.tasknest.model.dto.board;
+package com.progettone.tasknest.model.dto.task;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class BoardDtoRqsPut extends BoardDtoRspSimple {
+public class TaskDtoRqsPosition {
 
-    private boolean visible;
-
+    Integer id;
+    Integer position;
 }

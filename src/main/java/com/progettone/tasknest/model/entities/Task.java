@@ -1,11 +1,14 @@
 package com.progettone.tasknest.model.entities;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +37,8 @@ public class Task {
     private String title;
     private String description;
     private LocalDate expired_date;
-    private String state;
+    private String state; // ("TO DO", "IN PROGRESS","COMPLETED", "CANCELLED", "ON HOLD");
+
     private Integer position;
 
     @JsonIgnore
@@ -50,4 +54,11 @@ public class Task {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tasklist_id")
     private TaskList tasklist;
+
+    public boolean isValid() {
+
+        return title != null && !title.isBlank() &&
+                description != null && !description.isBlank() &&
+                expired_date != null && expired_date.isAfter(LocalDate.now());
+    }
 }

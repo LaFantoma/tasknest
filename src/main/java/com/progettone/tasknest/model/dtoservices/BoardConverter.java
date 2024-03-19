@@ -1,8 +1,7 @@
 package com.progettone.tasknest.model.dtoservices;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +10,11 @@ import org.springframework.stereotype.Service;
 import com.progettone.tasknest.model.dto.board.BoardDtoRqsPut;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspSimple;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspTaskname;
-import com.progettone.tasknest.model.dto.tasklist.TasklistDtoRspName;
+
 import com.progettone.tasknest.model.entities.Board;
-import com.progettone.tasknest.model.entities.TaskList;
+
 import com.progettone.tasknest.model.entities.User;
-import com.progettone.tasknest.model.entities.UserToBoard;
+
 import com.progettone.tasknest.model.repositories.BoardsRepository;
 import com.progettone.tasknest.model.repositories.TasklistRepository;
 import com.progettone.tasknest.model.repositories.UserToBoardRepository;
@@ -67,13 +66,13 @@ public class BoardConverter {
 
     public Board dtoRqsPutToBoard(BoardDtoRqsPut dto) {
 
-        return Board
-                .builder()
-                .id(dto.getId())
-                .title(dto.getTitle())
-                .description(dto.getDescription())
-                .visible(dto.isVisible())
-                .build();
+        Board board = bRepo.findById(dto.getId()).get();
+
+        board.setTitle(dto.getTitle());
+        board.setDescription(dto.getDescription());
+        board.setVisible(dto.isVisible());
+        return board;
+
     }
 
 }
