@@ -1,13 +1,16 @@
 package com.progettone.tasknest.model.dtoservices;
 
-import java.time.LocalDate;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.progettone.tasknest.model.dto.task.TaskDtoRqsPost;
+import com.progettone.tasknest.model.dto.task.TaskDtoRspFull;
 import com.progettone.tasknest.model.entities.Task;
 import com.progettone.tasknest.model.entities.TaskList;
+import com.progettone.tasknest.model.entities.User;
 import com.progettone.tasknest.model.repositories.TaskRepository;
 import com.progettone.tasknest.model.repositories.TasklistRepository;
 
@@ -33,6 +36,25 @@ public class TaskConverter {
                 .position(padre.getTasks().size() + 1)
                 .tasklist(padre)
                 .build();
+    }
+
+    public TaskDtoRspFull TaskToDtoRspFull(Task t) {
+
+        return TaskDtoRspFull
+                .builder()
+                .id(t.getId())
+                .title(t.getTitle())
+                .description(t.getDescription())
+                .expired_date(t.getExpired_date())
+                .state(t.getState())
+                .position(t.getPosition())
+                .assigned_to(findUsers(t))
+                .build();
+    }
+
+    public Set<User> findUsers(Task t) {
+
+        return t.getAssigned_to().stream().map(i -> i.getMy_user()).collect(Collectors.toSet());
     }
 
 }

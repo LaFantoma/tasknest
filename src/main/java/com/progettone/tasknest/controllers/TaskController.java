@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.progettone.tasknest.model.dto.task.TaskDtoRqsPosition;
 import com.progettone.tasknest.model.dto.task.TaskDtoRqsPost;
+import com.progettone.tasknest.model.dto.task.TaskDtoRspFull;
 import com.progettone.tasknest.model.dtoservices.TaskConverter;
 import com.progettone.tasknest.model.entities.Task;
 import com.progettone.tasknest.model.entities.TaskList;
@@ -87,6 +90,16 @@ public class TaskController {
         tRepo.save(t);
         return new ResponseEntity<String>("New position setted!", HttpStatus.OK);
 
+    }
+
+    @GetMapping("/tasks/{id}")
+    public ResponseEntity<?> getTask(@PathVariable Integer id) {
+
+        Optional<Task> ot = tRepo.findById(id);
+        if (!ot.isPresent())
+            return new ResponseEntity<String>("task non esistente", HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<TaskDtoRspFull>(tConv.TaskToDtoRspFull(ot.get()), HttpStatus.OK);
     }
 
 }
