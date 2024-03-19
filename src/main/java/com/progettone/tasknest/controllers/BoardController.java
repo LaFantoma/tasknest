@@ -2,20 +2,27 @@ package com.progettone.tasknest.controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.progettone.tasknest.model.dto.board.BoardDtoRqsPut;
+import com.progettone.tasknest.model.dto.board.BoardDtoRqsUsers;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspSimple;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspTaskname;
 import com.progettone.tasknest.model.dtoservices.BoardConverter;
 import com.progettone.tasknest.model.entities.Board;
 import com.progettone.tasknest.model.entities.UserToBoard;
 import com.progettone.tasknest.model.repositories.BoardsRepository;
+import com.progettone.tasknest.model.repositories.UserRepository;
 import com.progettone.tasknest.model.repositories.UserToBoardRepository;
 
 @RestController
@@ -23,6 +30,9 @@ public class BoardController {
 
     @Autowired
     BoardsRepository bRepo;
+
+    @Autowired
+    UserRepository uRepo;
 
     @Autowired
     BoardConverter bConv;
@@ -55,6 +65,70 @@ public class BoardController {
             return new ResponseEntity<BoardDtoRspTaskname>(bConv.BoardToDtoRspTaskname(board), HttpStatus.OK);
         } else
             return new ResponseEntity<String>("board inesistente", HttpStatus.NOT_FOUND);
+
+    }
+
+    @PutMapping("/boards")
+    public ResponseEntity<?> modifyBoard(@RequestBody BoardDtoRqsPut dto) {
+
+        Optional<Board> b = bRepo.findById(dto.getId());
+
+        if (!b.isPresent())
+            return new ResponseEntity<String>("board inesistente", HttpStatus.NOT_FOUND);
+
+        // Board board = bConv.dtoRqsPutToBoard(dto);
+
+        Board board = b.get();
+        board.setTitle(dto.getTitle());
+        board.setDescription(dto.getDescription());
+        board.setVisible(dto.isVisible());
+        bRepo.save(board);
+        return new ResponseEntity<Board>(board, HttpStatus.OK);
+    }
+
+    @PutMapping("/boards/users")
+    public ResponseEntity<?> modifyUsers(@RequestBody BoardDtoRqsUsers dto) { // IL DELIRIO CHE STRANAMENTE FUNZIONA
+                                                                              // OMG!!
+
+        Optional<Board> b = bRepo.findById(dto.getId());
+
+        if (!b.isPresent())
+            return new ResponseEntity<String>("board inesistente", HttpStatus.NOT_FOUND);
+
+        Board board = b.get();
+
+        // lista di ID degli utenti modificata
+        Set<Integer> newUsersList = dto.getUsers_id();
+
+        // lista di ID dei vecchi utenti
+        Set<Integer> oldUsersList = board.getMy_users().stream().map(i -> i.getMy_user().getId())
+                .collect(Collectors.toSet());
+
+        // se nella nuova lista sono presenti nuovi elementi creo nuovi elementi nella
+        // tabella usersToBoard
+        for (Integer i : newUsersList) {
+            if (!oldUsersList.contains(i)) {
+                UserToBoard utb = UserToBoard.builder()
+                        .my_user(uRepo.findById(i).get())
+                        .my_board(board)
+                        .build();
+                utbRepo.save(utb);
+            }
+        }
+
+        // se nella nuova lista non ci sono degli alementi presenti nella vecchia vado a
+        // eliminare i collegamenti userToBoard
+        for (Integer i : oldUsersList)
+            if (!newUsersList.contains(i))
+                utbRepo.deleteById(i);
+
+        // risetto la lista di UserToBoard collegata a questa board
+        board.setMy_users(utbRepo.findAll().stream().filter(i -> i.getMy_board().getId() == board.getId())
+                .collect(Collectors.toSet()));
+
+        bRepo.save(board);
+
+        return new ResponseEntity<BoardDtoRspTaskname>(bConv.BoardToDtoRspTaskname(board), HttpStatus.OK);
 
     }
 

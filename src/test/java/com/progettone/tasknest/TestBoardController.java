@@ -26,96 +26,101 @@ import com.progettone.tasknest.model.repositories.UserRepository;
 @AutoConfigureMockMvc
 public class TestBoardController {
 
-    @Autowired
-    private MockMvc mock;
+        @Autowired
+        private MockMvc mock;
 
-    @Autowired
-    private ObjectMapper om;
+        @Autowired
+        private ObjectMapper om;
 
-    @Autowired
-    BoardsRepository bRepo;
+        @Autowired
+        BoardsRepository bRepo;
 
-    @Autowired
-    UserRepository uRepo;
+        @Autowired
+        UserRepository uRepo;
 
-    @Autowired
-    TasklistRepository tlRepo;
+        @Autowired
+        TasklistRepository tlRepo;
 
-    @Autowired
-    TasklistConverter tlConv;
+        @Autowired
+        TasklistConverter tlConv;
 
-    @Test
-    void BoardUserTest() throws Exception {
+        @Test
+        void BoardUserTest() throws Exception {
 
-        List<BoardDtoRspSimple> res = new ArrayList<>();
-        res.add(BoardDtoRspSimple.builder()
-                .title("titolo")
-                .description("board di prova")
-                .id(1)
-                .build());
-        res.add(BoardDtoRspSimple.builder()
-                .title("totolo2")
-                .description("seconda board di prova")
-                .id(2)
-                .build());
+                List<BoardDtoRspSimple> res = new ArrayList<>();
+                res.add(BoardDtoRspSimple.builder()
+                                .title("titolo")
+                                .description("board di prova")
+                                .id(1)
+                                .build());
+                res.add(BoardDtoRspSimple.builder()
+                                .title("totolo2")
+                                .description("seconda board di prova")
+                                .id(2)
+                                .build());
 
-        mock.perform // utente con due board
-        (
-                MockMvcRequestBuilders
-                        .get("/boards/user/1")
+                mock.perform // utente con due board
+                (
+                                MockMvcRequestBuilders
+                                                .get("/boards/user/1")
 
-                        .contentType(MediaType.APPLICATION_JSON)
+                                                .contentType(MediaType.APPLICATION_JSON)
 
-        )
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(om.writeValueAsString(res)));
+                )
+                                .andExpect(MockMvcResultMatchers.status().isOk())
+                                .andExpect(MockMvcResultMatchers.content().json(om.writeValueAsString(res)));
 
-        mock.perform // utente senza board
-        (
-                MockMvcRequestBuilders
-                        .get("/boards/user/2")
+                mock.perform // utente senza board
+                (
+                                MockMvcRequestBuilders
+                                                .get("/boards/user/2")
 
-                        .contentType(MediaType.APPLICATION_JSON)
+                                                .contentType(MediaType.APPLICATION_JSON)
 
-        )
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.content().string("Nessuna board presente"));
-    }
+                )
+                                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                                .andExpect(MockMvcResultMatchers.content().string("Nessuna board presente"));
+        }
 
-    @Test
-    void BoardTest() throws Exception {
+        @Test
+        void BoardTest() throws Exception {
 
-        BoardDtoRspTaskname response = BoardDtoRspTaskname.builder()
-                .title("titolo")
-                .description("board di prova")
-                .date_of_creation(LocalDate.parse("2024-03-18"))
-                .visible(true)
-                .my_users(uRepo.findAll().stream().filter(i -> i.getId() == 1).toList())
-                .id(1)
-                .my_tasklists(bRepo.findById(1).get().getMy_tasklists().stream()
-                        .map(i -> tlConv.TasklistToDtoRspName(i)).collect(Collectors.toSet()))
-                .build();
+                BoardDtoRspTaskname response = BoardDtoRspTaskname.builder()
+                                .title("titolo")
+                                .description("board di prova")
+                                .date_of_creation(LocalDate.parse("2024-03-18"))
+                                .visible(true)
+                                .my_users(uRepo.findAll().stream().filter(i -> i.getId() == 1).toList())
+                                .id(1)
+                                .my_tasklists(bRepo.findById(1).get().getMy_tasklists().stream()
+                                                .map(i -> tlConv.tasklistToDtoRspName(i)).collect(Collectors.toSet()))
+                                .build();
 
-        mock.perform // board esistente
-        (
-                MockMvcRequestBuilders
-                        .get("/boards/1")
+                mock.perform // board esistente
+                (
+                                MockMvcRequestBuilders
+                                                .get("/boards/1")
 
-                        .contentType(MediaType.APPLICATION_JSON)
+                                                .contentType(MediaType.APPLICATION_JSON)
 
-        )
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(om.writeValueAsString(response)));
+                )
+                                .andExpect(MockMvcResultMatchers.status().isOk())
+                                .andExpect(MockMvcResultMatchers.content().json(om.writeValueAsString(response)));
 
-        mock.perform // board inesistente
-        (
-                MockMvcRequestBuilders
-                        .get("/boards/999")
+                mock.perform // board inesistente
+                (
+                                MockMvcRequestBuilders
+                                                .get("/boards/999")
 
-                        .contentType(MediaType.APPLICATION_JSON)
+                                                .contentType(MediaType.APPLICATION_JSON)
 
-        )
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.content().string("board inesistente"));
-    }
+                )
+                                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                                .andExpect(MockMvcResultMatchers.content().string("board inesistente"));
+        }
+
+        @Test
+        void PutBoardTest() throws Exception {
+
+        }
 }
