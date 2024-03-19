@@ -56,14 +56,14 @@ public class TaskListController {
         if (request.getIdList() != null && request.getNewPosition() != null
                 && request.getNewPosition() < tlRepo.findAll().size()) {
             if (request.getNewPosition() > tl.getPosition()) {
-                tlRepo.findAll().stream().filter(t -> t.getPosition() <= request.getNewPosition()).forEach(f -> {
+                tlRepo.findAll().stream().filter(t ->t.getBoard()==tl.getBoard() &&  t.getPosition() <= request.getNewPosition()).forEach(f -> {
                     if (f.getPosition() != 0) {
                         f.setPosition(f.getPosition() - 1);
                         tlRepo.save(f);
                     }
                 });
             } else {
-                tlRepo.findAll().stream().filter(t -> t.getPosition() >= request.getNewPosition()).forEach(f -> {
+                tlRepo.findAll().stream().filter(t ->t.getBoard()==tl.getBoard() && t.getPosition() >= request.getNewPosition()).forEach(f -> {
                     if (f.getPosition() != tlRepo.findAll().size() - 1) {
                         f.setPosition(f.getPosition() + 1);
                         tlRepo.save(f);
