@@ -43,6 +43,7 @@ public class BoardConverter {
                 .id(b.getId())
                 .title(b.getTitle())
                 .description(b.getDescription())
+                .img(b.getImg())
                 .build();
     }
 
@@ -53,6 +54,7 @@ public class BoardConverter {
                 .id(b.getId())
                 .title(b.getTitle())
                 .description(b.getDescription())
+                .img(b.getImg())
                 .date_of_creation(b.getDate_of_creation())
                 .visible(b.isVisible())
                 .my_users(findUsers(b))

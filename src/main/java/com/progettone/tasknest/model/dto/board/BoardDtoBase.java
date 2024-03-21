@@ -17,4 +17,5 @@ public class BoardDtoBase {
     private String description;
     private LocalDate date_of_creation;
     private boolean visible;
+    private Integer img;
 }

@@ -34,6 +34,7 @@ public class Board {
     private String description;
     private LocalDate date_of_creation;
     private boolean visible;
+    private Integer img;
 
     @JsonIgnore
     @OneToMany(mappedBy = "my_board", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)

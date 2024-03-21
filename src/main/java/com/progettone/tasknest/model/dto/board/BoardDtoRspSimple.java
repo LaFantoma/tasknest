@@ -14,4 +14,5 @@ public class BoardDtoRspSimple {
     private Integer id;
     private String title;
     private String description;
+    private Integer img;
 }
