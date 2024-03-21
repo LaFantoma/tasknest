@@ -36,7 +36,9 @@ public class UserController {
             return ResponseEntity.badRequest().body("La email non è valida");
         }
         repo.save(q);
-        return ResponseEntity.ok().body("Registrazione avvenuta con successo");
+        UserDtoRspId userDto = conv.UserToUserDtoRspId(q);
+
+        return ResponseEntity.ok().body(userDto);
     }
 
     @PostMapping("/user/login")

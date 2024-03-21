@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.progettone.tasknest.model.dto.task.TaskDtoRqsPost;
 import com.progettone.tasknest.model.dto.task.TaskDtoRspFull;
+import com.progettone.tasknest.model.dto.task.TaskDtoRspSimple;
 import com.progettone.tasknest.model.entities.Task;
 import com.progettone.tasknest.model.entities.TaskList;
 import com.progettone.tasknest.model.entities.User;
@@ -55,6 +56,16 @@ public class TaskConverter {
     public Set<User> findUsers(Task t) {
 
         return t.getAssigned_to().stream().map(i -> i.getMy_user()).collect(Collectors.toSet());
+    }
+
+    public TaskDtoRspSimple taskToDtoRspSimple(Task t) {
+
+        return TaskDtoRspSimple
+                .builder()
+                .id(t.getId())
+                .title(t.getTitle())
+                .position(t.getPosition())
+                .build();
     }
 
 }
