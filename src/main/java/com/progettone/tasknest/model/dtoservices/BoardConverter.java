@@ -1,5 +1,7 @@
 package com.progettone.tasknest.model.dtoservices;
 
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import java.util.stream.Collectors;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.progettone.tasknest.model.dto.board.BoardDtoRqsPut;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspSimple;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspTaskname;
-
+import com.progettone.tasknest.model.dto.tasklist.TasklistDtoRspName;
 import com.progettone.tasknest.model.entities.Board;
 
 import com.progettone.tasknest.model.entities.User;
@@ -54,8 +56,10 @@ public class BoardConverter {
                 .date_of_creation(b.getDate_of_creation())
                 .visible(b.isVisible())
                 .my_users(findUsers(b))
-                .my_tasklists(b.getMy_tasklists().stream().map(i -> tlConv.tasklistToDtoRspName(i))
-                        .collect(Collectors.toSet()))
+                .my_tasklists(
+                        b.getMy_tasklists().stream().map(i -> tlConv.tasklistToDtoRspName(i))
+                                .sorted(Comparator.comparing(TasklistDtoRspName::getPosition))
+                                .collect(Collectors.toCollection(LinkedHashSet::new)))
                 .build();
     }
 
