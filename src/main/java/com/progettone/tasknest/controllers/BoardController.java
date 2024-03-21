@@ -19,6 +19,7 @@ import com.progettone.tasknest.model.dto.board.BoardDtoRqsPut;
 import com.progettone.tasknest.model.dto.board.BoardDtoRqsUsers;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspSimple;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspTaskname;
+import com.progettone.tasknest.model.dto.board.BordDtoRqsImg;
 import com.progettone.tasknest.model.dtoservices.BoardConverter;
 import com.progettone.tasknest.model.entities.Board;
 import com.progettone.tasknest.model.entities.UserToBoard;
@@ -125,6 +126,22 @@ public class BoardController {
 
         return new ResponseEntity<BoardDtoRspTaskname>(bConv.BoardToDtoRspTaskname(board), HttpStatus.OK);
 
+    }
+
+    @PutMapping("/boards/img")
+    public ResponseEntity<?> modifyUsersImg(@RequestBody BordDtoRqsImg dto)
+    {
+        Optional<Board> b = bRepo.findById(dto.getId());
+
+        if (!b.isPresent())
+            return new ResponseEntity<String>("board inesistente", HttpStatus.NOT_FOUND);
+
+        Board board = b.get();
+
+        board.setImg(dto.getImgId());
+        bRepo.save(board);
+
+        return new ResponseEntity<String>("Immagine modificata con successo",HttpStatus.OK);
     }
 
     @DeleteMapping("/boards/{id}")

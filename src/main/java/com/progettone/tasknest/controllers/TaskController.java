@@ -88,6 +88,7 @@ public class TaskController {
                     });
         }
         t.setPosition(dto.getPosition());
+        t.setTasklist(tlRepo.findByPositionAndBoardId(dto.getTaskLP(), dto.getBoardId()).get());
         tRepo.save(t);
         return new ResponseEntity<String>("New position setted!", HttpStatus.OK);
 

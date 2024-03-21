@@ -1,4 +1,4 @@
-package com.progettone.tasknest.model.dto.task;
+package com.progettone.tasknest.model.dto.board;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class TaskDtoRqsPosition {
-
-    Integer id;
-    Integer position;
-    Integer taskLP;
-    Integer boardId;
+public class BordDtoRqsImg {
+    
+    private Integer id;
+    private Integer imgId;
 }
