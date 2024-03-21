@@ -1,8 +1,4 @@
-package com.progettone.tasknest.model.dto.tasklist;
-
-import java.util.Set;
-
-import com.progettone.tasknest.model.dto.task.TaskDtoRspSimple;
+package com.progettone.tasknest.model.dto.task;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +9,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class TasklistDtoRspName {
+public class TaskDtoRspSimple {
 
     private Integer id;
     private String title;
     private Integer position;
-    private Set<TaskDtoRspSimple> my_tasks;
-
 }
