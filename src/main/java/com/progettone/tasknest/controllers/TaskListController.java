@@ -1,6 +1,7 @@
 package com.progettone.tasknest.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.progettone.tasknest.model.dto.board.BoardDtoRspTaskname;
+import com.progettone.tasknest.model.dto.tasklist.TasklistDtoRspName;
 import com.progettone.tasknest.model.dto.tasklist.TasklistInstRqs;
 import com.progettone.tasknest.model.dto.tasklist.TasklistMoveRqs;
 import com.progettone.tasknest.model.dto.tasklist.TasklistPutRqs;
@@ -19,6 +22,8 @@ import com.progettone.tasknest.model.dtoservices.TasklistConverter;
 import com.progettone.tasknest.model.entities.Board;
 import com.progettone.tasknest.model.entities.TaskList;
 import com.progettone.tasknest.model.repositories.TasklistRepository;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class TaskListController {
@@ -67,16 +72,18 @@ public class TaskListController {
 
         if (request.getNewPosition() > tl.getPosition()) {
 
-            tLIsts.stream().filter(i -> i.getPosition() <= request.getNewPosition() && i.getPosition() > tl.getPosition())
+            tLIsts.stream()
+                    .filter(i -> i.getPosition() <= request.getNewPosition() && i.getPosition() > tl.getPosition())
                     .forEach(e -> {
                         e.setPosition(e.getPosition() - 1);
                         tlRepo.save(e);
                     });
         }
 
-         if (request.getNewPosition() < tl.getPosition()) {
+        if (request.getNewPosition() < tl.getPosition()) {
 
-            tLIsts.stream().filter(i -> i.getPosition() >= request.getNewPosition() && i.getPosition() < tl.getPosition())
+            tLIsts.stream()
+                    .filter(i -> i.getPosition() >= request.getNewPosition() && i.getPosition() < tl.getPosition())
                     .forEach(e -> {
                         e.setPosition(e.getPosition() + 1);
                         tlRepo.save(e);
@@ -97,4 +104,17 @@ public class TaskListController {
         } else
             return new ResponseEntity<String>("Non esiste una list con id " + id, HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("lists/{id}")
+    public ResponseEntity<?> getList(@RequestParam Integer id) {
+
+        Optional<TaskList> ot = tlRepo.findById(id);
+
+        if (ot.isPresent()) {
+            TaskList t = ot.get();
+            return new ResponseEntity<TasklistDtoRspName>(tlConv.tasklistToDtoRspName(t), HttpStatus.OK);
+        } else
+            return new ResponseEntity<String>("lista inesistente", HttpStatus.NOT_FOUND);
+    }
+
 }
