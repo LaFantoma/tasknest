@@ -24,6 +24,9 @@ public class TaskConverter {
     @Autowired
     TasklistRepository tlRepo;
 
+    @Autowired
+    CommentConverter cConv;
+
     public Task dtoPostToTask(TaskDtoRqsPost dto) {
 
         TaskList padre = tlRepo.findById(dto.getTasklist_id()).get();
@@ -50,6 +53,7 @@ public class TaskConverter {
                 .state(t.getState())
                 .position(t.getPosition())
                 .assigned_to(findUsers(t))
+                .comments(t.getComments().stream().map(i -> cConv.boardToDto(i)).collect(Collectors.toSet()))
                 .build();
     }
 
