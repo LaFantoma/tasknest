@@ -13,6 +13,6 @@ public class TaskDtoRqsPosition {
 
     Integer id;
     Integer position;
-    Integer taskLP;
+    Integer tasklistPosition;
     Integer boardId;
 }
