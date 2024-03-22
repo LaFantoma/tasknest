@@ -1,5 +1,6 @@
 package com.progettone.tasknest.model.dtoservices;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.progettone.tasknest.model.dto.board.BoardDtoRqsPut;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspSimple;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspTaskname;
+import com.progettone.tasknest.model.dto.board.BordDtoRqsPost;
 import com.progettone.tasknest.model.dto.tasklist.TasklistDtoRspName;
 import com.progettone.tasknest.model.entities.Board;
 
@@ -44,6 +46,18 @@ public class BoardConverter {
                 .title(b.getTitle())
                 .description(b.getDescription())
                 .img(b.getImg())
+                .build();
+    }
+
+    public Board BordDtoRqsPostToBoard(BordDtoRqsPost dto)
+    {
+        return Board
+                .builder()
+                .title(dto.getTitle())
+                .date_of_creation(LocalDate.now())
+                .description(dto.getDescription())
+                .visible(dto.isVisible())
+                .img(dto.getImg())
                 .build();
     }
 

@@ -20,12 +20,15 @@ import com.progettone.tasknest.model.dto.board.BoardDtoRqsUsers;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspSimple;
 import com.progettone.tasknest.model.dto.board.BoardDtoRspTaskname;
 import com.progettone.tasknest.model.dto.board.BordDtoRqsImg;
+import com.progettone.tasknest.model.dto.board.BordDtoRqsPost;
 import com.progettone.tasknest.model.dtoservices.BoardConverter;
 import com.progettone.tasknest.model.entities.Board;
 import com.progettone.tasknest.model.entities.UserToBoard;
 import com.progettone.tasknest.model.repositories.BoardsRepository;
 import com.progettone.tasknest.model.repositories.UserRepository;
 import com.progettone.tasknest.model.repositories.UserToBoardRepository;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 @RestController
 public class BoardController {
@@ -69,6 +72,14 @@ public class BoardController {
             return new ResponseEntity<String>("board inesistente", HttpStatus.NOT_FOUND);
 
     }
+
+    @PostMapping("path")
+    public ResponseEntity<?> postBoard(@RequestBody BordDtoRqsPost dto) {
+        bRepo.save(bConv.BordDtoRqsPostToBoard(dto));
+
+        return new ResponseEntity<String>("board creata con successo", HttpStatus.OK);
+    }
+    
 
     @PutMapping("/boards")
     public ResponseEntity<?> modifyBoard(@RequestBody BoardDtoRqsPut dto) {
@@ -131,7 +142,7 @@ public class BoardController {
     @PutMapping("/boards/img")
     public ResponseEntity<?> modifyUsersImg(@RequestBody BordDtoRqsImg dto)
     {
-        Optional<Board> b = bRepo.findById(dto.getId());
+        Optional<Board> b = bRepo.findById(dto.getIdBoard());
 
         if (!b.isPresent())
             return new ResponseEntity<String>("board inesistente", HttpStatus.NOT_FOUND);

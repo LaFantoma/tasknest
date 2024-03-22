@@ -1,5 +1,6 @@
 package com.progettone.tasknest.model.dto.board;
 
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,10 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class BordDtoRqsImg {
-    
-    private Integer idBoard;
-    private Integer imgId;
+public class BordDtoRqsPost {
+    private String title;
+    private String description;
+    private LocalDate date_of_creation;
+    private boolean visible;
+    private Integer img;
 }
