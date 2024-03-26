@@ -2,9 +2,10 @@ package com.progettone.tasknest.model.dtoservices;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,10 @@ import com.progettone.tasknest.model.dto.tasklist.TasklistDtoRspName;
 import com.progettone.tasknest.model.entities.Board;
 
 import com.progettone.tasknest.model.entities.User;
-
+import com.progettone.tasknest.model.entities.UserToBoard;
 import com.progettone.tasknest.model.repositories.BoardsRepository;
 import com.progettone.tasknest.model.repositories.TasklistRepository;
+import com.progettone.tasknest.model.repositories.UserRepository;
 import com.progettone.tasknest.model.repositories.UserToBoardRepository;
 
 @Service
@@ -34,6 +36,9 @@ public class BoardConverter {
 
     @Autowired
     UserToBoardRepository utbRepo;
+
+    @Autowired
+    UserRepository uRepo;
 
     @Autowired
     TasklistRepository tlRepo;
@@ -51,7 +56,7 @@ public class BoardConverter {
 
     public Board BordDtoRqsPostToBoard(BordDtoRqsPost dto)
     {
-        return Board
+        Board board = Board
                 .builder()
                 .title(dto.getTitle())
                 .date_of_creation(LocalDate.now())
@@ -59,6 +64,7 @@ public class BoardConverter {
                 .visible(dto.isVisible())
                 .img(dto.getImg())
                 .build();
+        return board;
     }
 
     public BoardDtoRspTaskname BoardToDtoRspTaskname(Board b) {

@@ -1,5 +1,6 @@
 package com.progettone.tasknest.controllers;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,7 +29,6 @@ import com.progettone.tasknest.model.repositories.BoardsRepository;
 import com.progettone.tasknest.model.repositories.UserRepository;
 import com.progettone.tasknest.model.repositories.UserToBoardRepository;
 import org.springframework.web.bind.annotation.PostMapping;
-
 
 @RestController
 public class BoardController {
@@ -73,13 +73,22 @@ public class BoardController {
 
     }
 
-    @PostMapping("path")
+    @PostMapping("/boards")
     public ResponseEntity<?> postBoard(@RequestBody BordDtoRqsPost dto) {
-        bRepo.save(bConv.BordDtoRqsPostToBoard(dto));
+        Board board = bConv.BordDtoRqsPostToBoard(dto);
+        Set<UserToBoard> userSet = new HashSet<>();
+        UserToBoard utb = UserToBoard
+                .builder()
+                .my_board(board)
+                .my_user(uRepo.findById(dto.getUserId()).get())
+                .build();
+        userSet.add(utb);
+        board.setMy_users(userSet);
+        bRepo.save(board);
+        utbRepo.save(utb);
 
         return new ResponseEntity<String>("board creata con successo", HttpStatus.OK);
     }
-    
 
     @PutMapping("/boards")
     public ResponseEntity<?> modifyBoard(@RequestBody BoardDtoRqsPut dto) {
@@ -140,8 +149,7 @@ public class BoardController {
     }
 
     @PutMapping("/boards/img")
-    public ResponseEntity<?> modifyUsersImg(@RequestBody BordDtoRqsImg dto)
-    {
+    public ResponseEntity<?> modifyUsersImg(@RequestBody BordDtoRqsImg dto) {
         Optional<Board> b = bRepo.findById(dto.getIdBoard());
 
         if (!b.isPresent())
@@ -152,7 +160,7 @@ public class BoardController {
         board.setImg(dto.getImgId());
         bRepo.save(board);
 
-        return new ResponseEntity<String>("Immagine modificata con successo",HttpStatus.OK);
+        return new ResponseEntity<String>("Immagine modificata con successo", HttpStatus.OK);
     }
 
     @DeleteMapping("/boards/{id}")
