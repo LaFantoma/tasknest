@@ -1,6 +1,6 @@
 package com.progettone.tasknest.model.dtoservices;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +30,11 @@ public class CommentConverter {
 
         return CommentDtoRsp
                 .builder()
+                .id(c.getId())
                 .body(c.getBody())
                 .made_at(c.getMade_at())
                 .author_name(c.getAuthor().getName())
+                .author_id(c.getAuthor().getId())
                 .build();
     }
 
@@ -47,7 +49,7 @@ public class CommentConverter {
                 .body(dto.getBody())
                 .task(task)
                 .author(author)
-                .made_at(LocalDate.now())
+                .made_at(LocalDateTime.now())
                 .build();
     }
 }

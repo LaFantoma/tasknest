@@ -1,6 +1,6 @@
 package com.progettone.tasknest.model.dto.comment;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,8 +13,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class CommentDtoRsp {
 
+    private Integer id;
     private String body;
-    private LocalDate made_at;
+    private LocalDateTime made_at;
     private String author_name;
+    private Integer author_id;
 
 }
