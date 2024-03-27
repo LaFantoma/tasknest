@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import com.progettone.tasknest.model.dto.comment.CommentDtoRsp;
+import com.progettone.tasknest.model.dto.user.UserDtoBase;
 import com.progettone.tasknest.model.entities.Comment;
 import com.progettone.tasknest.model.entities.User;
 
@@ -25,5 +26,5 @@ public class TaskDtoRspFull {
     private String state;
     private Integer position;
     private Set<CommentDtoRsp> comments;
-    private Set<User> assigned_to;
+    private Set<String> assigned_to;
 }

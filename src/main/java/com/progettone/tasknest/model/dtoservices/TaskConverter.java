@@ -27,6 +27,9 @@ public class TaskConverter {
     @Autowired
     CommentConverter cConv;
 
+    @Autowired
+    UserConverter uConv;
+
     public Task dtoPostToTask(TaskDtoRqsPost dto) {
 
         TaskList padre = tlRepo.findById(dto.getTasklist_id()).get();
@@ -52,8 +55,8 @@ public class TaskConverter {
                 .expired_date(t.getExpired_date())
                 .state(t.getState())
                 .position(t.getPosition())
-                .assigned_to(findUsers(t))
-                .comments(t.getComments().stream().map(i -> cConv.boardToDto(i)).collect(Collectors.toSet()))
+                .assigned_to(t.getAssigned_to().stream().map(i -> i.getMy_user().getName()).collect(Collectors.toSet()))
+                .comments(t.getComments().stream().map(i -> cConv.commentToDto(i)).collect(Collectors.toSet()))
                 .build();
     }
 

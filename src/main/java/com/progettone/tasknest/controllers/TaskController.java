@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.progettone.tasknest.model.dto.task.TaskDtoRqsModDescr;
 import com.progettone.tasknest.model.dto.task.TaskDtoRqsPosition;
 import com.progettone.tasknest.model.dto.task.TaskDtoRqsPost;
 import com.progettone.tasknest.model.dto.task.TaskDtoRspFull;
@@ -134,6 +135,25 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.OK);
         } else
             return new ResponseEntity<String>("Non esiste una task con id " + id, HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/tasks/description")
+    public ResponseEntity<?> modifyTask(@RequestBody TaskDtoRqsModDescr dto) {
+
+        if (!tRepo.findById(dto.getId()).isPresent())
+            return new ResponseEntity<String>("task inesistente", HttpStatus.NOT_FOUND);
+
+        Task t = tRepo.findById(dto.getId()).get();
+
+        String desc = dto.getDescription();
+        // se la nuova descrizione è vuota mantieni quella vecchia
+        if (desc == null || desc.isEmpty() || desc.isBlank())
+            return new ResponseEntity<TaskDtoRspFull>(tConv.TaskToDtoRspFull(t), HttpStatus.OK);
+
+        t.setDescription(dto.getDescription());
+        tRepo.save(t);
+        return new ResponseEntity<TaskDtoRspFull>(tConv.TaskToDtoRspFull(t), HttpStatus.OK);
+
     }
 
 }
