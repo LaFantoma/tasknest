@@ -1,6 +1,7 @@
 package com.progettone.tasknest.model.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,7 +31,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String body;
-    private LocalDate made_at;
+    private LocalDateTime made_at;
 
     @JsonIgnore
     @ToString.Exclude
