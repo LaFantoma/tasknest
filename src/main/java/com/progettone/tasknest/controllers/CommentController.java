@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.progettone.tasknest.model.dto.comment.CommentDtoRqs;
 import com.progettone.tasknest.model.dto.comment.CommentDtoRqsMod;
+import com.progettone.tasknest.model.dto.comment.CommentDtoRsp;
 import com.progettone.tasknest.model.dtoservices.CommentConverter;
 import com.progettone.tasknest.model.entities.Comment;
 import com.progettone.tasknest.model.entities.Task;
@@ -50,8 +51,13 @@ public class CommentController {
         if (!ou.isPresent())
             return new ResponseEntity<String>("user non esistente", HttpStatus.BAD_REQUEST);
 
-        cRepo.save(cConv.dtoToComment(dto));
-        return new ResponseEntity<String>("New comment succesfuly created!", HttpStatus.OK);
+        String body = dto.getBody();
+        if (body == null || body.isEmpty() || body.isBlank())
+            return new ResponseEntity<String>("invalid comment", HttpStatus.BAD_REQUEST);
+
+        Comment c = cConv.dtoToComment(dto);
+        cRepo.save(c);
+        return new ResponseEntity<CommentDtoRsp>(cConv.commentToDto(c), HttpStatus.OK);
 
     }
 
@@ -65,7 +71,7 @@ public class CommentController {
             return new ResponseEntity<String>("illegal request", HttpStatus.BAD_REQUEST);
 
         c.setBody(dto.getBody());
-        return new ResponseEntity<String>("comment succesfuly modified!", HttpStatus.OK);
+        return new ResponseEntity<CommentDtoRsp>(cConv.commentToDto(c), HttpStatus.OK);
     }
 
     @DeleteMapping("/comments/{id}")

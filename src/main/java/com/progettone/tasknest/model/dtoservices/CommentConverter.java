@@ -26,7 +26,7 @@ public class CommentConverter {
     @Autowired
     TaskRepository tRepo;
 
-    public CommentDtoRsp boardToDto(Comment c) {
+    public CommentDtoRsp commentToDto(Comment c) {
 
         return CommentDtoRsp
                 .builder()
