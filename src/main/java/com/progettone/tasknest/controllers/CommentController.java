@@ -71,6 +71,7 @@ public class CommentController {
             return new ResponseEntity<String>("illegal request", HttpStatus.BAD_REQUEST);
 
         c.setBody(dto.getBody());
+        cRepo.save(c);
         return new ResponseEntity<CommentDtoRsp>(cConv.commentToDto(c), HttpStatus.OK);
     }
 
